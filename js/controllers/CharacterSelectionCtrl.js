@@ -1,6 +1,6 @@
 
 
-var CharacterSelectionCtrl = function($scope, $http) {
+var CharacterSelectionCtrl = function($scope, CharacterApi) {
 
 
     $scope.redCorner = {};
@@ -19,23 +19,25 @@ var CharacterSelectionCtrl = function($scope, $http) {
     $scope.filteredCharacters = [];
     $scope.characters = [];
 
-    $scope.fetchCharacters = function() {
-        $http.get('http://gateway.marvel.com/v1/public/characters?apikey=1eb21a7f360cea33e97b2113fe8a483f').
-            success(function(data, status, headers, config) {
+
+
+
+    $scope.loadCharacters = function() {
+        CharacterApi.getAll()
+            .success(function(data, status, headers, config) {
                 $scope.characters = $scope.characters.concat(data.data.results);
 
                 if($scope.currentPage * $scope.numPerPage > $scope.characters.length) {
                     $scope.filterCharacters();
                     $scope.$apply();
                 }
-            }).
-            error(function(data, status, headers, config) {
-                console.log(data)
-                console.log("error")
+            }).error(function(data, status, headers, config) {
+                    console.log(data)
+                    console.log("error")
             });
     };
 
-    $scope.fetchCharacters();
+    $scope.loadCharacters();
 
     $scope.filterCharacters = function() {
         var begin = (($scope.currentPage - 1) * $scope.numPerPage)
@@ -50,6 +52,6 @@ var CharacterSelectionCtrl = function($scope, $http) {
     });
 
 
-}
+};
 
 module.exports = CharacterSelectionCtrl;

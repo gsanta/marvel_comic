@@ -1,5 +1,7 @@
 var angular = require("angular");
 var CharacterSelectionCtrl = require("./controllers/CharacterSelectionCtrl");
+var FightCtrl = require("./controllers/FightCtrl");
+var CharacterApi = require("./services/CharacterApi");
 var angularBootstrap = require("angular-bootstrap");
 var ngRouter = require("angular-route");
 typeof angularBootstrap;
@@ -14,5 +16,11 @@ angular.module("dueDateCalculator")
                 templateUrl: 'templates/character_selection.html',
                 controller: 'CharacterSelectionCtrl'
             })
+            .when('/fight/:redCornerId/:blueCornerId', {
+                templateUrl: 'templates/fight.html',
+                controller: 'FightCtrl'
+            });
     })
-    .controller("CharacterSelectionCtrl", CharacterSelectionCtrl);
+    .controller("CharacterSelectionCtrl", CharacterSelectionCtrl)
+    .controller("FightCtrl", FightCtrl)
+    .factory('CharacterApi',CharacterApi);

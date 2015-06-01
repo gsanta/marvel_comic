@@ -1,6 +1,6 @@
 
 
-var MainController = function($scope, $http) {
+var CharacterSelectionCtrl = function($scope, $http) {
 
 
     $scope.redCorner = {};
@@ -52,4 +52,4 @@ var MainController = function($scope, $http) {
 
 }
 
-module.exports = MainController;
+module.exports = CharacterSelectionCtrl;

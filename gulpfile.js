@@ -31,6 +31,7 @@ gulp.task('lib-js', function () {
         .require('angular')
         .require('bootstrap')
         .require('angular-bootstrap')
+        .require('angular-route')
         .bundle()
         .on('error', function(e) { console.log(e) })
         .pipe(source('lib.js'))
@@ -108,6 +109,7 @@ function compileScripts(entryFile) {
     bundler.external('angular');
     bundler.external('bootstrap');
     bundler.external('angular-bootstrap');
+    bundler.external('angular-route');
     bundler.transform(es6ify);
 
 

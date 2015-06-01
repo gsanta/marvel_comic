@@ -1,0 +1,42 @@
+<div class="row">
+    <div class="col-xs-6 col-md-3">
+        <div class="thumbnail">
+            <img ng-src="{{redCorner.thumbnail.path}}/portrait_xlarge.jpg" alt="character" >
+            <div class="caption">
+                <h3>{{redCorner.name}}</h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xs-12 col-md-6">
+    </div>
+
+    <div class="col-xs-6 col-md-3">
+        <div class="thumbnail">
+            <img ng-src="{{blueCorner.thumbnail.path}}/portrait_xlarge.jpg" alt="character" >
+            <div class="caption">
+                <h3>{{blueCorner.name}}</h3>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-xs-6 col-md-3" ng-repeat="character in filteredCharacters">
+        <div class="thumbnail">
+            <img ng-src="{{character.thumbnail.path}}/portrait_xlarge.jpg" alt="character" >
+            <button ng-click="setRedCorner($index, currentPage)">Red Corner</button>
+            <div class="caption">
+                <h3>{{character.name}}</h3>
+            </div>
+            <button ng-click="setBlueCorner($index, currentPage)">Blue Corner</button>
+        </div>
+    </div>
+</div>
+
+<pager
+        boundary-links="true"
+        ng-model="currentPage"
+        class="pagination-sm"
+        total-items="100"
+        previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></pager>

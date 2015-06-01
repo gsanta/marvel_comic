@@ -14,35 +14,47 @@
 
 <body  ng-controller="mainController">
 
-<button type="button" class="btn btn-primary">
-    Single Toggle
-</button>
-
-<button ng-click="getComics()">Button</button>
-
 <div class="row">
-    <div class="col-sm-6 col-md-4" ng-repeat="character in characters">
+    <div class="col-xs-6 col-md-3">
         <div class="thumbnail">
-            <img ng-src="{{character.thumbnail.path}}/portrait_xlarge.jpg" alt="character">
+            <img ng-src="{{redCorner.thumbnail.path}}/portrait_xlarge.jpg" alt="character" >
             <div class="caption">
-                <h3>{{character.name}}</h3>
+                <h3>{{redCorner.name}}</h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xs-12 col-md-6">
+    </div>
+
+    <div class="col-xs-6 col-md-3">
+        <div class="thumbnail">
+            <img ng-src="{{blueCorner.thumbnail.path}}/portrait_xlarge.jpg" alt="character" >
+            <div class="caption">
+                <h3>{{blueCorner.name}}</h3>
             </div>
         </div>
     </div>
 </div>
 
-<h1>Todos</h1>
-<h4>{{todos.length}} total</h4>
-<ul>
-    <li ng-repeat="todo in filteredTodos">{{todo.text}}</li>
-</ul>
+<div class="row">
+    <div class="col-xs-6 col-md-3" ng-repeat="character in filteredCharacters">
+        <div class="thumbnail">
+            <img ng-src="{{character.thumbnail.path}}/portrait_xlarge.jpg" alt="character" >
+            <button ng-click="setRedCorner($index, currentPage)">Red Corner</button>
+            <div class="caption">
+                <h3>{{character.name}}</h3>
+            </div>
+            <button ng-click="setBlueCorner($index, currentPage)">Blue Corner</button>
+        </div>
+    </div>
+</div>
 
 <pager
         boundary-links="true"
-        total-items="todos.length"
         ng-model="currentPage"
         class="pagination-sm"
-        max-size="maxSize"
+        total-items="100"
         previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></pager>
 
 

@@ -1,41 +1,52 @@
 
 
 var MainController = function($scope, $http) {
+
+
+    $scope.redCorner = {};
+    $scope.setRedCorner = function(index, page) {
+        $scope.redCorner = $scope.characters[(page - 1) * $scope.numPerPage + index];
+    };
+
+    $scope.blueCorner = {};
+    $scope.setBlueCorner = function(index, page) {
+        $scope.blueCorner = $scope.characters[(page - 1) * $scope.numPerPage + index];
+    };
+
+    $scope.currentPage = 1;
+    $scope.numPerPage = 4;
+
+    $scope.filteredCharacters = [];
     $scope.characters = [];
 
-    $scope.getComics = function() {
+    $scope.fetchCharacters = function() {
         $http.get('http://gateway.marvel.com/v1/public/characters?apikey=1eb21a7f360cea33e97b2113fe8a483f').
             success(function(data, status, headers, config) {
-                console.log(data)
-                $scope.characters = data.data.results;
-                console.log("success")
+                $scope.characters = $scope.characters.concat(data.data.results);
+
+                if($scope.currentPage * $scope.numPerPage > $scope.characters.length) {
+                    $scope.filterCharacters();
+                    $scope.$apply();
+                }
             }).
             error(function(data, status, headers, config) {
                 console.log(data)
                 console.log("error")
-                // called asynchronously if an error occurs
-                // or server returns response with an error status.
             });
-    }
-
-    $scope.filteredTodos = []
-    $scope.currentPage = 1
-    $scope.numPerPage = 10
-    $scope.maxSize = 5;
-
-    $scope.makeTodos = function() {
-        $scope.todos = [];
-        for (var i=1;i<=1000;i++) {
-            $scope.todos.push({ text:"todo "+i, done:false});
-        }
     };
-    $scope.makeTodos();
 
-    $scope.$watch("currentPage + numPerPage", function() {
+    $scope.fetchCharacters();
+
+    $scope.filterCharacters = function() {
         var begin = (($scope.currentPage - 1) * $scope.numPerPage)
             , end = begin + $scope.numPerPage;
 
-        $scope.filteredTodos = $scope.todos.slice(begin, end);
+        $scope.filteredCharacters = $scope.characters.slice(begin, end);
+    };
+
+
+    $scope.$watch("currentPage", function() {
+        $scope.filterCharacters();
     });
 
 

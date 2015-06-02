@@ -16,22 +16,40 @@ angular.module("dueDateCalculator", ['ui.bootstrap', 'ngRoute']);
 angular.module("dueDateCalculator")
     .config(function($routeProvider, $locationProvider) {
         $routeProvider
-            .when('/', {
+            .when('/list/:offset', {
                 templateUrl: 'templates/character_selection.html',
-                controller: 'CharacterSelectionCtrl'
+                controller: 'CharacterSelectionCtrl',
+                resolve: {
+                    characters: function($route, CharacterApi) {
+                        return CharacterApi.getAll($route.current.params.offset);
+                    }
+                }
             })
             .when('/fight/:redCornerId/:blueCornerId', {
                 templateUrl: 'templates/fight.html',
                 controller: 'FightCtrl',
                 resolve: {
-                    redCorner: function($route, CharacterApi){
+                    redCorner: function($route, CharacterApi) {
                         return CharacterApi.getById($route.current.params.redCornerId);
                     },
-                    blueCorner: function($route, CharacterApi){
+                    blueCorner: function($route, CharacterApi) {
                         return CharacterApi.getById($route.current.params.blueCornerId);
                     }
                 }
             });
+    })
+    .run(function ($route, $rootScope, $location) {
+        var original = $location.path;
+        $location.path = function (path, reload) {
+            if (reload === false) {
+                var lastRoute = $route.current;
+                var un = $rootScope.$on('$locationChangeSuccess', function () {
+                    $route.current = lastRoute;
+                    un();
+                });
+            }
+            return original.apply($location, [path]);
+        };
     })
     .controller("CharacterSelectionCtrl", CharacterSelectionCtrl)
     .controller("FightCtrl", FightCtrl)

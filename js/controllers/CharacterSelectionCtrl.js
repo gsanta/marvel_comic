@@ -1,7 +1,14 @@
 
+function convertCharacterData(character) {
+    return {
+        name: character.name,
+        description: character.description,
+        id: character.id,
+        thumbnailPath: character.thumbnail ? character.thumbnail.path : null
+    }
+}
 
-var CharacterSelectionCtrl = function($scope, CharacterApi) {
-
+var CharacterSelectionCtrl = function(characters, $scope, $location, $routeParams, CharacterApi) {
 
     $scope.redCorner = {};
     $scope.setRedCorner = function(data) {
@@ -16,40 +23,28 @@ var CharacterSelectionCtrl = function($scope, CharacterApi) {
     $scope.currentPage = 1;
     $scope.numPerPage = 4;
 
-    $scope.offsetOnServer = 20;
+    $scope.offsetOnServer = 0;
     $scope.numPerPageOnServer = 20;
 
     $scope.filteredCharacters = [];
     $scope.characters = [];
 
 
-
-
     $scope.loadCharacters = function(offset) {
         CharacterApi.getAll(offset)
             .success(function(data, status, headers, config) {
-                var mappedResult = data.data.results.map(function(character) {
-                    return {
-                        name: character.name,
-                        description: character.description,
-                        id: character.id,
-                        thumbnailPath: character.thumbnail ? character.thumbnail.path : null
-                    }
-                });
-
+                var mappedResult = data.data.results.map(character => convertCharacterData(character));
                 [].splice.apply($scope.characters, [data.data.offset, mappedResult.length].concat(mappedResult));
 
                 $scope.offsetOnServer = $scope.characters.length;
-                //if($scope.currentPage * $scope.numPerPage > $scope.characters.length) {
-                //    $scope.filterCharacters();
-                //    $scope.$apply();
-                //}
 
                 $scope.filterCharacters();
-            }).error(function(data, status, headers, config) {
-                    console.log(data)
-                    console.log("error")
-            });
+                $location.path('/list/' + data.data.offset, false)
+            }).error((data, status, headers, config) => console.log("error"));
+    };
+
+    $scope.init = function() {
+        $scope.offsetOnServer = $routeParams.offset;
     };
 
     $scope.loadCharacters(0);
@@ -58,7 +53,7 @@ var CharacterSelectionCtrl = function($scope, CharacterApi) {
         var begin = (($scope.currentPage - 1) * $scope.numPerPage)
             , end = begin + $scope.numPerPage;
 
-        if($scope.currentPage * $scope.numPerPage > $scope.offsetOnServer) {
+        if($scope.currentPage * $scope.numPerPage > $scope.offsetOnServer + $scope.numPerPageOnServer) {
             $scope.loadCharacters($scope.offsetOnServer);
         }
 

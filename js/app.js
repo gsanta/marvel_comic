@@ -1,12 +1,15 @@
 var angular = require("angular");
+
 var CharacterSelectionCtrl = require("./controllers/CharacterSelectionCtrl");
 var FightCtrl = require("./controllers/FightCtrl");
+
 var CharacterApi = require("./services/CharacterApi");
+var Fighter = require("./services/Fighter");
+
 var characterBox = require("./directives/characterBox");
+
 var angularBootstrap = require("angular-bootstrap");
 var ngRouter = require("angular-route");
-typeof angularBootstrap;
-typeof ngRouter;
 
 angular.module("dueDateCalculator", ['ui.bootstrap', 'ngRoute']);
 
@@ -33,4 +36,5 @@ angular.module("dueDateCalculator")
     .controller("CharacterSelectionCtrl", CharacterSelectionCtrl)
     .controller("FightCtrl", FightCtrl)
     .factory("CharacterApi",CharacterApi)
+    .factory("Fighter", Fighter)
     .directive("characterBox", characterBox);

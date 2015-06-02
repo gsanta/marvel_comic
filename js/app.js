@@ -18,7 +18,15 @@ angular.module("dueDateCalculator")
             })
             .when('/fight/:redCornerId/:blueCornerId', {
                 templateUrl: 'templates/fight.html',
-                controller: 'FightCtrl'
+                controller: 'FightCtrl',
+                resolve: {
+                    redCorner: function($route, CharacterApi){
+                        return CharacterApi.getById($route.current.params.redCornerId);
+                    },
+                    blueCorner: function($route, CharacterApi){
+                        return CharacterApi.getById($route.current.params.blueCornerId);
+                    }
+                }
             });
     })
     .controller("CharacterSelectionCtrl", CharacterSelectionCtrl)

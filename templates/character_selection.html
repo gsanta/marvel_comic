@@ -1,9 +1,11 @@
 <div class="row">
     <div class="col-xs-6 col-md-3">
-        <div class="thumbnail">
-            <img ng-src="{{redCorner.thumbnail.path}}/portrait_xlarge.jpg" alt="character" >
-            <div class="caption">
-                <h3>{{redCorner.name}}</h3>
+        <div class="character-box">
+            <div style="width:150px;height:225px; background: red;">
+                <img class="thumbnail" ng-src="{{redCorner.thumbnail.path}}/portrait_xlarge.jpg">
+            </div>
+            <div class="description">
+                {{redCorner.name}}
             </div>
         </div>
     </div>
@@ -13,10 +15,12 @@
     </div>
 
     <div class="col-xs-6 col-md-3">
-        <div class="thumbnail">
-            <img ng-src="{{blueCorner.thumbnail.path}}/portrait_xlarge.jpg" alt="character" >
-            <div class="caption">
-                <h3>{{blueCorner.name}}</h3>
+        <div class="character-box">
+            <div style="width:150px;height:225px;background: blue;">
+                <img class="thumbnail" ng-src="{{blueCorner.thumbnail.path}}/portrait_xlarge.jpg">
+            </div>
+            <div class="description">
+                {{blueCorner.name}}
             </div>
         </div>
     </div>
@@ -24,13 +28,13 @@
 
 <div class="row">
     <div class="col-xs-6 col-md-3" ng-repeat="character in filteredCharacters">
-        <div class="thumbnail">
-            <img ng-src="{{character.thumbnail.path}}/portrait_xlarge.jpg" alt="character" >
-            <button ng-click="setRedCorner($index, currentPage)">Red Corner</button>
-            <div class="caption">
-                <h3>{{character.name}}</h3>
+        <div class="character-box">
+            <div class="selection-button" ng-click="setRedCorner($index, currentPage)">></div>
+            <img class="thumbnail" ng-src="{{character.thumbnail.path}}/portrait_xlarge.jpg">
+            <div class="selection-button" ng-click="setBlueCorner($index, currentPage)"></div>
+            <div class="description">
+                {{character.name}}
             </div>
-            <button ng-click="setBlueCorner($index, currentPage)">Blue Corner</button>
         </div>
     </div>
 </div>

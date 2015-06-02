@@ -1,53 +1,46 @@
 <div class="row">
     <div class="col-xs-6 col-md-3">
-        <div class="character-box">
-            <div style="width:150px;height:225px; background: red;">
-                <img class="thumbnail" ng-src="{{redCorner.thumbnail.path}}/portrait_xlarge.jpg">
-            </div>
-            <div class="description">
-                {{redCorner.name}}
-            </div>
-        </div>
+        <character-box
+                class="redCorner"
+                description="redCorner.description"
+                img-url="redCorner.thumbnailPath ? redCorner.thumbnailPath + '/portrait_xlarge.jpg' : null">
+        </character-box>
     </div>
 
     <div class="col-xs-12 col-md-6">
-        <a ng-href="#/fight/{{redCorner.id}}/{{blueCorner.id}}">Start Fight</a>
+        <a class="btn btn-danger btn-block fight-button" ng-href="#/fight/{{redCorner.id}}/{{blueCorner.id}}">Start Fight</a>
     </div>
 
     <div class="col-xs-6 col-md-3">
-        <!--<div class="character-box">-->
-            <!--<div style="width:150px;height:225px;background: blue;">-->
-                <!--<img class="thumbnail" ng-src="{{blueCorner.thumbnail.path}}/portrait_xlarge.jpg">-->
-            <!--</div>-->
-            <!--<div class="description">-->
-                <!--{{blueCorner.name}}-->
-            <!--</div>-->
-        <!--</div>-->
-
         <character-box
-                description="blueCorner.name"
-                imgUrl="{{blueCorner.thumbnail.path}}/portrait_xlarge.jpg">
+               class="blueCorner"
+               description="blueCorner.description"
+               img-url="blueCorner.thumbnailPath ? blueCorner.thumbnailPath + '/portrait_xlarge.jpg' : null">
         </character-box>
     </div>
 </div>
 
-<div class="row" style="margin:0;">
-    <div class="col-xs-6 col-md-3" ng-repeat="character in filteredCharacters">
-        <div class="character-box">
-            <div class="selection-button" ng-click="setRedCorner($index, currentPage)">></div>
-            <img class="thumbnail" ng-src="{{character.thumbnail.path}}/portrait_xlarge.jpg">
-            <div class="selection-button" ng-click="setBlueCorner($index, currentPage)"></div>
-            <div class="description">
-                {{character.name}}
-            </div>
-        </div>
+<div class="row">
+    <div class="col-md-12">
+        <pager
+            boundary-links="true"
+            ng-model="currentPage"
+            class="pagination-sm"
+            total-items="100"
+            previous-text="Prev" next-text="Next">
+        </pager>
     </div>
 </div>
 
-<pager
-        boundary-links="true"
-        ng-model="currentPage"
-        class="pagination-sm"
-        total-items="100"
-        previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;">
-</pager>
+<div class="row list">
+    <div class="col-xs-6 col-md-3" ng-repeat="character in filteredCharacters">
+        <character-box
+                description="character.description"
+                img-url="character.thumbnailPath + '/portrait_xlarge.jpg'"
+                action-right="setBlueCorner(character)"
+                action-left="setRedCorner(character)"
+                data="character">
+        </character-box>
+    </div>
+</div>
+

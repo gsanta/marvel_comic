@@ -4,13 +4,13 @@ var CharacterSelectionCtrl = function($scope, CharacterApi) {
 
 
     $scope.redCorner = {};
-    $scope.setRedCorner = function(index, page) {
-        $scope.redCorner = $scope.characters[(page - 1) * $scope.numPerPage + index];
+    $scope.setRedCorner = function(data) {
+        $scope.redCorner = $scope.characters[$scope.characters.indexOf(data)];
     };
 
     $scope.blueCorner = {};
-    $scope.setBlueCorner = function(index, page) {
-        $scope.blueCorner = $scope.characters[(page - 1) * $scope.numPerPage + index];
+    $scope.setBlueCorner = function(data) {
+        $scope.blueCorner = $scope.characters[$scope.characters.indexOf(data)];
     };
 
     $scope.currentPage = 1;
@@ -25,7 +25,13 @@ var CharacterSelectionCtrl = function($scope, CharacterApi) {
     $scope.loadCharacters = function() {
         CharacterApi.getAll()
             .success(function(data, status, headers, config) {
-                $scope.characters = $scope.characters.concat(data.data.results);
+                $scope.characters = data.data.results.map(function(character) {
+                    return {
+                        description: character.name,
+                        id: character.id,
+                        thumbnailPath: character.thumbnail ? character.thumbnail.path : null
+                    }
+                });
 
                 if($scope.currentPage * $scope.numPerPage > $scope.characters.length) {
                     $scope.filterCharacters();
@@ -50,6 +56,10 @@ var CharacterSelectionCtrl = function($scope, CharacterApi) {
     $scope.$watch("currentPage", function() {
         $scope.filterCharacters();
     });
+
+    $scope.getImgUrl = function(url) {
+       return url + '/portrait_xlarge.jpg'
+    }
 
 
 };

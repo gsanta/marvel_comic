@@ -1,7 +1,18 @@
 <div class="character-box">
-    <div class="selection-button" ng-click="leftAction(data)">></div>
-    <img class="thumbnail" ng-src="imgUrl">
-    <div class="selection-button" ng-click="rightAction(data)"></div>
+    <button class="btn btn-primary selection-button selection-button-left"
+         ng-style="{true: {display: 'none'}, false: {}}[isActionLeftHidden]"
+         ng-click="actionLeft(data)">
+        R
+    </button>
+
+    <button class="btn btn-danger selection-button selection-button-right"
+         ng-style="{true: {display: 'none'}, false: {}}[isActionRightHidden]"
+         ng-click="actionRight(data)">
+        L
+    </button>
+
+    <img class="thumbnail" ng-show="imgUrl" ng-src="{{imgUrl}}">
+
     <div class="description">
         {{description}}
     </div>

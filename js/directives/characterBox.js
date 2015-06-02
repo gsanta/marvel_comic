@@ -10,8 +10,10 @@ var CharacterBox = function() {
             data: "="
         },
         templateUrl: 'templates/directives/character_box.html',
-        link: function(element, attr) {
+        link: function(scope, element, attr) {
 
+            scope.isActionLeftHidden = attr.actionLeft ? false : true;
+            scope.isActionRightHidden = attr.actionRight ? false : true;
         }
     }
 };

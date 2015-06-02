@@ -10,6 +10,7 @@ var FightCtrl = function(redCorner, blueCorner, $scope, $interval, Fighter) {
     $scope.rightHighlight = false;
 
     $scope.fight = function() {
+        $scope.rightHighlight = $scope.leftHighlight = false;
         $scope.rightHighlight = !$scope.rightHighlight;
 
         var interval = $interval(function() {

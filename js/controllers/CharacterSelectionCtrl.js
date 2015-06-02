@@ -27,7 +27,8 @@ var CharacterSelectionCtrl = function($scope, CharacterApi) {
             .success(function(data, status, headers, config) {
                 $scope.characters = data.data.results.map(function(character) {
                     return {
-                        description: character.name,
+                        name: character.name,
+                        description: character.description,
                         id: character.id,
                         thumbnailPath: character.thumbnail ? character.thumbnail.path : null
                     }

@@ -16,16 +16,19 @@ var CharacterSelectionCtrl = function($scope, CharacterApi) {
     $scope.currentPage = 1;
     $scope.numPerPage = 4;
 
+    $scope.offsetOnServer = 20;
+    $scope.numPerPageOnServer = 20;
+
     $scope.filteredCharacters = [];
     $scope.characters = [];
 
 
 
 
-    $scope.loadCharacters = function() {
-        CharacterApi.getAll()
+    $scope.loadCharacters = function(offset) {
+        CharacterApi.getAll(offset)
             .success(function(data, status, headers, config) {
-                $scope.characters = data.data.results.map(function(character) {
+                var mappedResult = data.data.results.map(function(character) {
                     return {
                         name: character.name,
                         description: character.description,
@@ -34,21 +37,30 @@ var CharacterSelectionCtrl = function($scope, CharacterApi) {
                     }
                 });
 
-                if($scope.currentPage * $scope.numPerPage > $scope.characters.length) {
-                    $scope.filterCharacters();
-                    $scope.$apply();
-                }
+                [].splice.apply($scope.characters, [data.data.offset, mappedResult.length].concat(mappedResult));
+
+                $scope.offsetOnServer = $scope.characters.length;
+                //if($scope.currentPage * $scope.numPerPage > $scope.characters.length) {
+                //    $scope.filterCharacters();
+                //    $scope.$apply();
+                //}
+
+                $scope.filterCharacters();
             }).error(function(data, status, headers, config) {
                     console.log(data)
                     console.log("error")
             });
     };
 
-    $scope.loadCharacters();
+    $scope.loadCharacters(0);
 
     $scope.filterCharacters = function() {
         var begin = (($scope.currentPage - 1) * $scope.numPerPage)
             , end = begin + $scope.numPerPage;
+
+        if($scope.currentPage * $scope.numPerPage > $scope.offsetOnServer) {
+            $scope.loadCharacters($scope.offsetOnServer);
+        }
 
         $scope.filteredCharacters = $scope.characters.slice(begin, end);
     };

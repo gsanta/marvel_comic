@@ -2,8 +2,8 @@
 
 var CharacterApi = function($http) {
 
-    function getAllCharacters() {
-        return $http.get('http://gateway.marvel.com/v1/public/characters?apikey=1eb21a7f360cea33e97b2113fe8a483f');
+    function getAllCharacters(offset) {
+        return $http.get('http://gateway.marvel.com/v1/public/characters?offset=' + offset + '&apikey=1eb21a7f360cea33e97b2113fe8a483f');
     }
 
     function getCharacterById(id) {

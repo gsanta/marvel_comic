@@ -1,5 +1,5 @@
 <div class="row">
-    <div class="col-xs-6 col-md-3">
+    <div class="col-xs-3 col-md-3">
         <character-box
                 class="redCorner" style="background: red;"
                 description="redCorner.name"
@@ -7,11 +7,11 @@
         </character-box>
     </div>
 
-    <div class="col-xs-12 col-md-6">
+    <div class="col-xs-6 col-md-6">
         <a class="btn btn-danger btn-block fight-button" ng-href="#/fight/{{redCorner.id}}/{{blueCorner.id}}">Start Fight</a>
     </div>
 
-    <div class="col-xs-6 col-md-3">
+    <div class="col-xs-3 col-md-3">
         <character-box
                class="blueCorner"
                description="blueCorner.name"
@@ -22,18 +22,13 @@
 
 <div class="row">
     <div class="col-md-12">
-        <pager
-            boundary-links="true"
-            ng-model="currentPage"
-            class="pagination-sm"
-            total-items="100"
-            previous-text="Prev" next-text="Next">
-        </pager>
+        <button style="float:left" ng-click="decreasePageNum()">Left</button>
+        <button style="float:right" ng-click="increasePageNum()">Right</button>
     </div>
 </div>
 
 <div class="row list">
-    <div class="col-xs-6 col-md-3" ng-repeat="character in filteredCharacters">
+    <div class="col-xs-3 col-md-3" ng-repeat="character in filteredCharacters">
         <character-box
                 description="character.name"
                 img-url="character.thumbnailPath + '/portrait_xlarge.jpg'"

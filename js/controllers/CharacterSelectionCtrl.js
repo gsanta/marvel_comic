@@ -8,7 +8,7 @@ function convertCharacterData(character) {
     }
 }
 
-var CharacterSelectionCtrl = function(characters, $scope, $location, $routeParams, CharacterApi) {
+var CharacterSelectionCtrl = function(charactersData, $scope, $location, $routeParams, CharacterApi) {
 
     $scope.redCorner = {};
     $scope.setRedCorner = function(data) {
@@ -20,56 +20,94 @@ var CharacterSelectionCtrl = function(characters, $scope, $location, $routeParam
         $scope.blueCorner = $scope.characters[$scope.characters.indexOf(data)];
     };
 
-    $scope.currentPage = 1;
     $scope.numPerPage = 4;
 
-    $scope.offsetOnServer = 0;
+    $scope.serverOffsetBottom = 0;
+    $scope.serverOffsetTop = 0;
     $scope.numPerPageOnServer = 20;
 
     $scope.filteredCharacters = [];
-    $scope.characters = [];
+    $scope.characters = new Array(1000);
 
 
     $scope.loadCharacters = function(offset) {
-        CharacterApi.getAll(offset)
-            .success(function(data, status, headers, config) {
-                var mappedResult = data.data.results.map(character => convertCharacterData(character));
-                [].splice.apply($scope.characters, [data.data.offset, mappedResult.length].concat(mappedResult));
-
-                $scope.offsetOnServer = $scope.characters.length;
-
-                $scope.filterCharacters();
-                $location.path('/list/' + data.data.offset, false)
-            }).error((data, status, headers, config) => console.log("error"));
+        return CharacterApi.getAll(offset)
+            .success((data, status, headers, config) => {
+                $scope.handleServerPageLoaded(data);
+                return data;
+            })
+            .error((data, status, headers, config) => console.log("error"));
     };
 
-    $scope.init = function() {
-        $scope.offsetOnServer = $routeParams.offset;
-    };
+    $scope.initController = function() {
+        $scope.currentPage = Math.floor(parseInt($routeParams.offset,10) / $scope.numPerPage) + 1;
+        $scope.serverOffsetBottom = $scope.currentPage * $scope.numPerPage;
+        $scope.serverOffsetTop = $scope.currentPage * $scope.numPerPage;
 
-    $scope.loadCharacters(0);
+        $scope.handlePageChanged();
+    };
 
     $scope.filterCharacters = function() {
         var begin = (($scope.currentPage - 1) * $scope.numPerPage)
             , end = begin + $scope.numPerPage;
 
-        if($scope.currentPage * $scope.numPerPage > $scope.offsetOnServer + $scope.numPerPageOnServer) {
-            $scope.loadCharacters($scope.offsetOnServer);
-        }
-
         $scope.filteredCharacters = $scope.characters.slice(begin, end);
     };
 
+    $scope.handleServerPageLoaded = function(charactersData) {
+        var mappedResult = charactersData.data.results.map(character => convertCharacterData(character));
+        [].splice.apply($scope.characters, [charactersData.data.offset, charactersData.data.limit].concat(mappedResult));
 
-    $scope.$watch("currentPage", function() {
         $scope.filterCharacters();
-    });
+    };
+
+    $scope.handlePageChanged = function() {
+        $scope.filterCharacters();
+
+        if(CharacterApi.shouldLoadNextPage($scope.currentPage, $scope.numPerPage, $scope.serverOffsetTop)) {
+            $scope.serverOffsetTop = CharacterApi.getNextPageOffset($scope.serverOffsetTop, $scope.numPerPageOnServer);
+            $scope.loadCharacters($scope.serverOffsetTop)
+                .success((data) => {
+                    $scope.serverOffsetTop = data.data.offset + data.data.limit;
+                });
+        }
+
+        if(CharacterApi.shouldLoadPrevPage($scope.currentPage, $scope.numPerPage, $scope.serverOffsetBottom)) {
+            $scope.serverOffsetBottom = CharacterApi.getPrevPageOffset($scope.serverOffsetBottom, $scope.numPerPageOnServer);
+            $scope.loadCharacters($scope.serverOffsetBottom)
+                .success((data) => {
+                    $scope.serverOffsetBottom = data.data.offset;
+                });
+        }
+
+        $location.path('/list/' + ($scope.currentPage - 1) * $scope.numPerPage, false);
+    };
+    //
+    //
+    //$scope.$watch("currentPage", function() {
+    //    $scope.filterCharacters();
+    //    $scope.handlePageChanged();
+    //});
+
+    $scope.increasePageNum = function() {
+        $scope.currentPage += 1;
+        $scope.filterCharacters();
+        $scope.handlePageChanged();
+    };
+
+    $scope.decreasePageNum = function() {
+        if($scope.currentPage > 1) {
+            $scope.currentPage -= 1;
+            $scope.filterCharacters();
+            $scope.handlePageChanged();
+        }
+    };
 
     $scope.getImgUrl = function(url) {
        return url + '/portrait_xlarge.jpg'
-    }
+    };
 
-
+    $scope.initController();
 };
 
 module.exports = CharacterSelectionCtrl;

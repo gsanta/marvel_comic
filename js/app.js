@@ -20,7 +20,7 @@ angular.module("dueDateCalculator")
                 templateUrl: 'templates/character_selection.html',
                 controller: 'CharacterSelectionCtrl',
                 resolve: {
-                    characters: function($route, CharacterApi) {
+                    charactersData: function($route, CharacterApi) {
                         return CharacterApi.getAll($route.current.params.offset);
                     }
                 }
@@ -36,7 +36,16 @@ angular.module("dueDateCalculator")
                         return CharacterApi.getById($route.current.params.blueCornerId);
                     }
                 }
-            });
+            })
+            //.otherwise({
+            //    templateUrl: 'templates/character_selection.html',
+            //    controller: 'CharacterSelectionCtrl',
+            //    resolve: {
+            //        charactersData: function($route, CharacterApi) {
+            //            return CharacterApi.getAll(0);
+            //        }
+            //    }
+            //});
     })
     .run(function ($route, $rootScope, $location) {
         var original = $location.path;

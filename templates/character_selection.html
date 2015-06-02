@@ -15,18 +15,23 @@
     </div>
 
     <div class="col-xs-6 col-md-3">
-        <div class="character-box">
-            <div style="width:150px;height:225px;background: blue;">
-                <img class="thumbnail" ng-src="{{blueCorner.thumbnail.path}}/portrait_xlarge.jpg">
-            </div>
-            <div class="description">
-                {{blueCorner.name}}
-            </div>
-        </div>
+        <!--<div class="character-box">-->
+            <!--<div style="width:150px;height:225px;background: blue;">-->
+                <!--<img class="thumbnail" ng-src="{{blueCorner.thumbnail.path}}/portrait_xlarge.jpg">-->
+            <!--</div>-->
+            <!--<div class="description">-->
+                <!--{{blueCorner.name}}-->
+            <!--</div>-->
+        <!--</div>-->
+
+        <character-box
+                description="blueCorner.name"
+                imgUrl="{{blueCorner.thumbnail.path}}/portrait_xlarge.jpg">
+        </character-box>
     </div>
 </div>
 
-<div class="row">
+<div class="row" style="margin:0;">
     <div class="col-xs-6 col-md-3" ng-repeat="character in filteredCharacters">
         <div class="character-box">
             <div class="selection-button" ng-click="setRedCorner($index, currentPage)">></div>
@@ -44,4 +49,5 @@
         ng-model="currentPage"
         class="pagination-sm"
         total-items="100"
-        previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></pager>
+        previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;">
+</pager>

@@ -1,27 +1,27 @@
 
 var Fighter = require("../services/Fighter");
 
-var FightCtrl = function(redCorner, blueCorner, $scope, $interval, Fighter) {
+var FightCtrl = function(redCorner, blueCorner, $interval, Fighter) {
 
-    $scope.redCorner = redCorner.data.data.results[0];
-    $scope.blueCorner = blueCorner.data.data.results[0];
+    this.redCorner = redCorner.data.data.results[0];
+    this.blueCorner = blueCorner.data.data.results[0];
 
-    $scope.leftHighlight = false;
-    $scope.rightHighlight = false;
+    this.leftHighlight = false;
+    this.rightHighlight = false;
 
-    $scope.fight = function() {
-        $scope.rightHighlight = $scope.leftHighlight = false;
-        $scope.rightHighlight = !$scope.rightHighlight;
+    this.fight = function() {
+        this.rightHighlight = this.leftHighlight = false;
+        this.rightHighlight = !this.rightHighlight;
 
-        var interval = $interval(function() {
-            $scope.rightHighlight = !$scope.rightHighlight;
-            $scope.leftHighlight = !$scope.leftHighlight;
+        var interval = $interval(() => {
+            this.rightHighlight = !this.rightHighlight;
+            this.leftHighlight = !this.leftHighlight;
         }, 200);
 
-        Fighter.fight().then(function(isWinnerTheLeft) {
+        Fighter.fight().then((isWinnerTheLeft) => {
             $interval.cancel(interval);
-            $scope.rightHighlight = $scope.leftHighlight = false;
-            isWinnerTheLeft ? $scope.leftHighlight = true : $scope.rightHighlight = true;
+            this.rightHighlight = this.leftHighlight = false;
+            isWinnerTheLeft ? this.leftHighlight = true : this.rightHighlight = true;
         });
     }
 };

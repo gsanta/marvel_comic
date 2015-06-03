@@ -1,23 +1,23 @@
 <div class="row fighter-container">
     <div class="col-xs-12 col-md-6">
-        <div class="fighter-box fighter-box-left" ng-class="{'highlight-left': leftHighlight}">
-            <div class="description">{{redCorner.description}}</div>
-            <img class="thumbnail" ng-src="{{redCorner.thumbnail.path}}/portrait_xlarge.jpg">
+        <div class="fighter-box fighter-box-left" ng-class="{'highlight-left': fight.leftHighlight}">
+            <div class="description">{{fight.redCorner.description}}</div>
+            <img class="thumbnail" ng-src="{{fight.redCorner.thumbnail.path}}/portrait_xlarge.jpg">
             <div class="name" style="clear:both;">
-                <h3>{{redCorner.name}}</h3>
+                <h3>{{fight.redCorner.name}}</h3>
             </div>
         </div>
     </div>
 
     <div class="col-xs-12 col-md-6">
-        <div class="fighter-box fighter-box-right" ng-class="{'highlight-right': rightHighlight}">
-            <div class="description">{{blueCorner.description}}</div>
-            <img class="thumbnail" ng-src="{{blueCorner.thumbnail.path}}/portrait_xlarge.jpg" alt="character" >
+        <div class="fighter-box fighter-box-right" ng-class="{'highlight-right': fight.rightHighlight}">
+            <div class="description">{{fight.blueCorner.description}}</div>
+            <img class="thumbnail" ng-src="{{fight.blueCorner.thumbnail.path}}/portrait_xlarge.jpg" alt="character" >
             <div class="name">
-                <h3>{{blueCorner.name}}</h3>
+                <h3>{{fight.blueCorner.name}}</h3>
             </div>
         </div>
     </div>
 </div>
 
-<button class="btn btn-danger btn-block fighter-button" ng-click="fight()">Fight</button>
+<button class="btn btn-danger btn-block fighter-button" ng-click="fight.fight()">Fight</button>

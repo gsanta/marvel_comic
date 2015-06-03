@@ -9,7 +9,7 @@ var CharacterBox = function() {
             description: "=",
             data: "="
         },
-        templateUrl: 'templates/directives/character_box.html',
+        templateUrl: 'dist/templates/directives/character_box.html',
         link: function(scope, element, attr) {
 
             scope.isActionLeftHidden = attr.actionLeft ? false : true;

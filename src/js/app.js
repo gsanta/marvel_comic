@@ -18,7 +18,7 @@ angular.module("dueDateCalculator")
     .config(function($routeProvider, $locationProvider) {
         $routeProvider
             .when('/list/:offset', {
-                templateUrl: 'templates/character_selection.html',
+                templateUrl: 'dist/templates/character_selection.html',
                 controller: 'CharacterSelectionCtrl',
                 controllerAs: 'characters',
                 resolve: {
@@ -28,7 +28,7 @@ angular.module("dueDateCalculator")
                 }
             })
             .when('/fight/:redCornerId/:blueCornerId', {
-                templateUrl: 'templates/fight.html',
+                templateUrl: 'dist/templates/fight.html',
                 controller: 'FightCtrl',
                 controllerAs: 'fight',
                 resolve: {
@@ -41,7 +41,7 @@ angular.module("dueDateCalculator")
                 }
             })
             .otherwise({
-                templateUrl: 'templates/character_selection.html',
+                templateUrl: 'dist/templates/character_selection.html',
                 controller: 'CharacterSelectionCtrl',
                 resolve: {
                     charactersData: function($route, CharacterApi) {

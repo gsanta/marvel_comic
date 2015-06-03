@@ -15,14 +15,22 @@ var config = {
     dist: './dist/app',
     distLib: './dist/lib',
 
-    scripts: "js/**/*.js",
-    sass: "assets/**/*.scss",
+    scripts: "src/js/**/*.js",
+    sass: "src/assets/**/*.scss",
 
     cssLib: [
         'lib/bootstrap/dist/css/bootstrap.css',
         'lib/bootstrap/dist/css/bootstrap-theme.css'
-    ]
+    ],
+
+    templatesSrc: './src/templates/**/*.html',
+    templateDist: './dist/templates'
 };
+
+gulp.task('template', function() {
+    gulp.src(config.templatesSrc)
+        .pipe(gulp.dest(config.templateDist));
+});
 
 gulp.task('lib-js', function () {
     return browserify()
@@ -71,16 +79,16 @@ gulp.task('sass', function() {
 });
 
 gulp.task('compile',['sass'], function() {
-    return compileScripts('./js/app.js');
+    return compileScripts('./src/js/app.js');
 });
 
-gulp.task('dev', ['server', 'lib', 'compile'], function() {
+gulp.task('dev', ['server', 'template', 'lib', 'compile'], function() {
     config.noMock = true;
 
     registerWatchers();
 });
 
-gulp.task('build', ['lib', 'compile'], function() {
+gulp.task('build', ['template', 'lib', 'compile'], function() {
 
 });
 

@@ -6,18 +6,60 @@
     <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.css"/>
     <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap-theme.css"/>
 
-    <title>Due Date Calculator</title>
+    <title>Comic Fighter</title>
 
-    <!--<link href="dist/lib/css/lib.css" rel="stylesheet">-->
-    <!--<link href="dist/app.js/css/app.js.css" rel="stylesheet">-->
     <style>
+        
+        body {
+            background-color: #dbc59e;
+        }
+        
         .character-box {
-            width: 250px;
+            width: 260px;
             height: 280px;
+            padding: 5px;
             border: 1px solid black;
+            -webkit-box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);
+            -moz-box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);
+            box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);
         }
 
-        .list .character-box{
+        .character-box .thumbnail {
+            margin-bottom: 10px;
+            width: 150px;
+            height: 225px;
+            margin-left: 50px;
+            margin-right: 40px;
+        }
+
+        .character-box .description {
+            background: white;
+        }
+
+        .nav-button {
+            width: 100px;
+        }
+
+        .nav-button-left {
+            float: left;
+            margin-left: 10px;
+        }
+
+        .nav-button-right {
+            float: right;
+            margin-right: 10px;
+        }
+
+        .character-selection {
+            margin-bottom: 10px;
+        }
+
+        .character-list {
+            margin-top: 10px;
+        }
+
+        .character-list .character-box {
+            background: #eea236;
             margin: 0 auto;
         }
 
@@ -38,18 +80,16 @@
             float: right;
         }
 
-        .character-box .thumbnail {
-            margin-left: 42px;
-            margin-right: 40px;
-        }
-
         .redCorner {
-            background: red;
+            float:left;
+            background: #b92c28;
+            margin: 5px 0 0 5px;
         }
 
         .blueCorner {
-            background: blue;
-            float:right
+            background: #245580;
+            float:right;
+            margin: 5px 5px 0 0;
         }
 
         .description {
@@ -57,11 +97,11 @@
         }
 
         .highlight-left {
-            background: red;
+            background: #b92c28;
         }
 
         .highlight-right {
-            background: blue;
+            background: #245580;
         }
 
         .fighter-box {

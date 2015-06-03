@@ -93,12 +93,9 @@ gulp.task('build', ['template', 'lib', 'compile'], function() {
 });
 
 function registerWatchers() {
-    if(config.noMock)
-        gulp.watch(config.scripts, ['test', 'compile']);
-    else
-        gulp.watch(config.scripts, ['test', 'compile-mock']);
-
+    gulp.watch(config.scripts, ['test', 'compile']);
     gulp.watch(config.sass, ['sass']);
+    gulp.watch(config.templatesSrc, ['template']);
 
     gulp.watch(['dist/**']).on('change', function(file) {
         gulp.src( 'dist/**')

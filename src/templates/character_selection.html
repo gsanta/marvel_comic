@@ -1,8 +1,8 @@
-<div class="row">
+<div class="row character-selection">
     <div class="col-xs-3 col-md-3">
         <character-box
-                class="redCorner" style="background: red;"
-                description="characters.redCorner.name"
+                class="redCorner"
+                description="characters.blueCorner.name"
                 img-url="characters.redCorner.thumbnailPath ? characters.redCorner.thumbnailPath + '/portrait_xlarge.jpg' : null">
         </character-box>
     </div>
@@ -25,12 +25,16 @@
 
 <div class="row">
     <div class="col-md-12">
-        <button style="float:left" ng-click="characters.decreasePageNum()">Left</button>
-        <button style="float:right" ng-click="characters.increasePageNum()">Right</button>
+        <button class="button btn-primary nav-button nav-button-left" ng-click="characters.decreasePageNum()">
+            <i class="glyphicon glyphicon-chevron-left">Back</i>
+        </button>
+        <button class="button btn-primary nav-button nav-button-right" ng-click="characters.increasePageNum()">
+           <i class="glyphicon glyphicon-chevron-right"></i>Forward
+        </button>
     </div>
 </div>
 
-<div class="row list">
+<div class="row character-list">
     <div class="col-xs-3 col-md-3" ng-repeat="character in characters.filteredCharacters">
         <character-box
                 description="character.name"

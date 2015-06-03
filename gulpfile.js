@@ -16,11 +16,14 @@ var config = {
     distLib: './dist/lib',
 
     scripts: "src/js/**/*.js",
-    sass: "src/assets/**/*.scss",
+    sass: "src/assets/sass/**/*.scss",
 
     cssLib: [
-        'lib/bootstrap/dist/css/bootstrap.css',
-        'lib/bootstrap/dist/css/bootstrap-theme.css'
+        'node_modules/bootstrap/dist/css/bootstrap.css',
+        'node_modules/bootstrap/dist/css/bootstrap-theme.css'
+    ],
+    fontsLib: [
+        'node_modules/bootstrap/dist/fonts/*.{ttf,woff,eof,svg,eot}'
     ],
 
     templatesSrc: './src/templates/**/*.html',
@@ -46,13 +49,18 @@ gulp.task('lib-js', function () {
         .pipe(gulp.dest(config.distLib + "/js"))
 });
 
+gulp.task('lib-fonts', function() {
+    gulp.src(config.fontsLib)
+        .pipe(gulp.dest(config.distLib + "/fonts"));
+});
+
 gulp.task('lib-css', function () {
     gulp.src(config.cssLib)
         .pipe(concat('lib.css'))
         .pipe(gulp.dest(config.distLib + "/css"));
 });
 
-gulp.task('lib', ['lib-js', 'lib-css'], function () {
+gulp.task('lib', ['lib-js', 'lib-css', 'lib-fonts'], function () {
 
 });
 
@@ -72,6 +80,7 @@ gulp.task('test', function(done) {
 });
 
 gulp.task('sass', function() {
+    console.log("sass task running")
     gulp.src(config.sass)
         .pipe(sass())
         .pipe(concat('app.css'))

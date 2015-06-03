@@ -1,8 +1,10 @@
+<div class="page-fight">
+
 <div class="row fighter-container">
     <div class="col-xs-12 col-md-6">
         <div class="fighter-box fighter-box-left" ng-class="{'highlight-left': fight.leftHighlight}">
             <div class="description">{{fight.redCorner.description || "No description available"}}</div>
-            <img class="thumbnail" ng-src="{{fight.redCorner.thumbnail.path}}/portrait_xlarge.jpg">
+            <img class="thumbnail" ng-src="{{fight.redCorner.thumbnail.path + '/portrait_xlarge.jpg'}}">
             <div class="name">
                 <h3>{{fight.redCorner.name}}</h3>
             </div>
@@ -21,3 +23,5 @@
 </div>
 
 <button class="btn btn-danger btn-block fighter-button" ng-click="fight.fight()">Fight</button>
+
+</div>

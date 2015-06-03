@@ -54,6 +54,7 @@ CharacterSelectionCtrl.prototype.initController = function() {
     this.serverOffsetBottom = this.currentPage * this.numPerPage;
     this.serverOffsetTop = this.currentPage * this.numPerPage;
 
+    this.loadCharacters(this.serverOffsetBottom);
     this.handlePageChanged();
 };
 

@@ -1,21 +1,23 @@
 
 var Fighter = require("../services/Fighter");
 
-var services = {}
+var services = {};
 
-var FightCtrl = function(redCorner, blueCorner, $interval, Fighter) {
+var FightCtrl = function($interval, Fighter, $routeParams, CharacterApi) {
     services = {
-        redCorner: redCorner,
-        blueCorner: blueCorner,
         $interval: $interval,
-        Fighter: Fighter
+        Fighter: Fighter,
+        $routeParams: $routeParams,
+        CharacterApi: CharacterApi
     };
 
-    this.redCorner = redCorner.data.data.results[0];
-    this.blueCorner = blueCorner.data.data.results[0];
+    this.redCorner = {};
+    this.blueCorner = {};
 
     this.leftHighlight = false;
     this.rightHighlight = false;
+
+    this.initController();
 };
 
 FightCtrl.prototype.fight = function() {
@@ -32,6 +34,17 @@ FightCtrl.prototype.fight = function() {
         this.rightHighlight = this.leftHighlight = false;
         isWinnerTheLeft ? this.leftHighlight = true : this.rightHighlight = true;
     });
+};
+
+FightCtrl.prototype.initController = function() {
+    this.loadCharacter(services.$routeParams.redCornerId).success((data) => {
+        this.redCorner = data.data.results[0];
+    });
+    this.loadCharacter(services.$routeParams.blueCornerId).success((data) => this.blueCorner = data.data.results[0]);
+};
+
+FightCtrl.prototype.loadCharacter = function(id) {
+    return services.CharacterApi.getById(id);
 }
 
 module.exports = FightCtrl;

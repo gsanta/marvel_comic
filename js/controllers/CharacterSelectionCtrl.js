@@ -40,7 +40,7 @@ var CharacterSelectionCtrl = function(charactersData, $scope, $location, $routeP
     };
 
     $scope.initController = function() {
-        $scope.currentPage = Math.floor(parseInt($routeParams.offset,10) / $scope.numPerPage) + 1;
+        $scope.currentPage = $routeParams.offset ? Math.floor(parseInt($routeParams.offset,10) / $scope.numPerPage) + 1 : 1;
         $scope.serverOffsetBottom = $scope.currentPage * $scope.numPerPage;
         $scope.serverOffsetTop = $scope.currentPage * $scope.numPerPage;
 
@@ -82,12 +82,6 @@ var CharacterSelectionCtrl = function(charactersData, $scope, $location, $routeP
 
         $location.path('/list/' + ($scope.currentPage - 1) * $scope.numPerPage, false);
     };
-    //
-    //
-    //$scope.$watch("currentPage", function() {
-    //    $scope.filterCharacters();
-    //    $scope.handlePageChanged();
-    //});
 
     $scope.increasePageNum = function() {
         $scope.currentPage += 1;

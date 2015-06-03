@@ -5,6 +5,7 @@ var FightCtrl = require("./controllers/FightCtrl");
 
 var CharacterApi = require("./services/CharacterApi");
 var Fighter = require("./services/Fighter");
+var ApiConstants = require("./services/ApiConstants");
 
 var characterBox = require("./directives/characterBox");
 
@@ -38,15 +39,15 @@ angular.module("dueDateCalculator")
                     }
                 }
             })
-            //.otherwise({
-            //    templateUrl: 'templates/character_selection.html',
-            //    controller: 'CharacterSelectionCtrl',
-            //    resolve: {
-            //        charactersData: function($route, CharacterApi) {
-            //            return CharacterApi.getAll(0);
-            //        }
-            //    }
-            //});
+            .otherwise({
+                templateUrl: 'templates/character_selection.html',
+                controller: 'CharacterSelectionCtrl',
+                resolve: {
+                    charactersData: function($route, CharacterApi) {
+                        return CharacterApi.getAll(0);
+                    }
+                }
+            });
     })
     .run(function ($route, $rootScope, $location) {
         var original = $location.path;
@@ -65,4 +66,5 @@ angular.module("dueDateCalculator")
     .controller("FightCtrl", FightCtrl)
     .factory("CharacterApi",CharacterApi)
     .factory("Fighter", Fighter)
+    .factory("ApiConstants", ApiConstants)
     .directive("characterBox", characterBox);

@@ -12,14 +12,6 @@
     -moz-box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);
     box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);
 
-    .fighter-box.highlight-left {
-      background: #b92c28;
-    }
-
-    .fighter-box.highlight-right {
-      background: #245580;
-    }
-
     .thumbnail {
       width: 150px;
       height: 225px;
@@ -36,6 +28,14 @@
       background: white;
       padding: 5px;
     }
+  }
+
+  .fighter-box.highlight-left {
+    background: #b92c28;
+  }
+
+  .fighter-box.highlight-right {
+    background: #245580;
   }
 
   .fighter-box.fighter-box-left {

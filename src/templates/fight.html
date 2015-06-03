@@ -1,9 +1,9 @@
 <div class="row fighter-container">
     <div class="col-xs-12 col-md-6">
         <div class="fighter-box fighter-box-left" ng-class="{'highlight-left': fight.leftHighlight}">
-            <div class="description">{{fight.redCorner.description}}</div>
+            <div class="description">{{fight.redCorner.description || "No description available"}}</div>
             <img class="thumbnail" ng-src="{{fight.redCorner.thumbnail.path}}/portrait_xlarge.jpg">
-            <div class="name" style="clear:both;">
+            <div class="name">
                 <h3>{{fight.redCorner.name}}</h3>
             </div>
         </div>
@@ -11,7 +11,7 @@
 
     <div class="col-xs-12 col-md-6">
         <div class="fighter-box fighter-box-right" ng-class="{'highlight-right': fight.rightHighlight}">
-            <div class="description">{{fight.blueCorner.description}}</div>
+            <div class="description">{{fight.blueCorner.description || "No description available"}}</div>
             <img class="thumbnail" ng-src="{{fight.blueCorner.thumbnail.path}}/portrait_xlarge.jpg" alt="character" >
             <div class="name">
                 <h3>{{fight.blueCorner.name}}</h3>

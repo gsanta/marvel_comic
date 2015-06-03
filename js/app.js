@@ -20,6 +20,7 @@ angular.module("dueDateCalculator")
             .when('/list/:offset', {
                 templateUrl: 'templates/character_selection.html',
                 controller: 'CharacterSelectionCtrl',
+                controllerAs: 'characters',
                 resolve: {
                     charactersData: function($route, CharacterApi) {
                         return CharacterApi.getAll($route.current.params.offset);

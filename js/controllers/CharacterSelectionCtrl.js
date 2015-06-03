@@ -8,100 +8,107 @@ function convertCharacterData(character) {
     }
 }
 
-var CharacterSelectionCtrl = function(charactersData, $scope, $location, $routeParams, CharacterApi) {
+var services = {};
 
-    $scope.redCorner = {};
-    $scope.setRedCorner = function(data) {
-        $scope.redCorner = $scope.characters[$scope.characters.indexOf(data)];
+var CharacterSelectionCtrl = function($location, $routeParams, CharacterApi) {
+    services = {
+        $location: $location,
+        $routeParams: $routeParams,
+        CharacterApi: CharacterApi
     };
 
-    $scope.blueCorner = {};
-    $scope.setBlueCorner = function(data) {
-        $scope.blueCorner = $scope.characters[$scope.characters.indexOf(data)];
-    };
+    this.redCorner = {};
+    this.blueCorner = {};
 
-    $scope.numPerPage = 4;
+    this.numPerPage = 4;
+    this.serverOffsetBottom = 0;
+    this.serverOffsetTop = 0;
+    this.numPerPageOnServer = 20;
 
-    $scope.serverOffsetBottom = 0;
-    $scope.serverOffsetTop = 0;
-    $scope.numPerPageOnServer = 20;
+    this.filteredCharacters = [];
+    this.characters = new Array(1000);
 
-    $scope.filteredCharacters = [];
-    $scope.characters = new Array(1000);
+    this.initController();
+};
 
+CharacterSelectionCtrl.prototype.setRedCorner = function(data) {
+    this.redCorner = this.characters[this.characters.indexOf(data)];
+};
 
-    $scope.loadCharacters = function(offset) {
-        return CharacterApi.getAll(offset)
-            .success((data, status, headers, config) => {
-                $scope.handleServerPageLoaded(data);
-                return data;
-            })
-            .error((data, status, headers, config) => console.log("error"));
-    };
+CharacterSelectionCtrl.prototype.setBlueCorner = function(data) {
+    this.blueCorner = this.characters[this.characters.indexOf(data)];
+};
 
-    $scope.initController = function() {
-        $scope.currentPage = $routeParams.offset ? Math.floor(parseInt($routeParams.offset,10) / $scope.numPerPage) + 1 : 1;
-        $scope.serverOffsetBottom = $scope.currentPage * $scope.numPerPage;
-        $scope.serverOffsetTop = $scope.currentPage * $scope.numPerPage;
+CharacterSelectionCtrl.prototype.loadCharacters = function(offset) {
+    return services.CharacterApi.getAll(offset)
+        .success((data, status, headers, config) => {
+            this.handleServerPageLoaded(data);
+            return data;
+        })
+        .error((data, status, headers, config) => console.log("error"));
+};
 
-        $scope.handlePageChanged();
-    };
+CharacterSelectionCtrl.prototype.initController = function() {
+    this.currentPage = services.$routeParams.offset ?
+            Math.floor(parseInt(services.$routeParams.offset,10) / this.numPerPage) + 1 : 1;
+    this.serverOffsetBottom = this.currentPage * this.numPerPage;
+    this.serverOffsetTop = this.currentPage * this.numPerPage;
 
-    $scope.filterCharacters = function() {
-        var begin = (($scope.currentPage - 1) * $scope.numPerPage)
-            , end = begin + $scope.numPerPage;
+    this.handlePageChanged();
+};
 
-        $scope.filteredCharacters = $scope.characters.slice(begin, end);
-    };
+CharacterSelectionCtrl.prototype.filterCharacters = function() {
+    var begin = ((this.currentPage - 1) * this.numPerPage)
+        , end = begin + this.numPerPage;
 
-    $scope.handleServerPageLoaded = function(charactersData) {
-        var mappedResult = charactersData.data.results.map(character => convertCharacterData(character));
-        [].splice.apply($scope.characters, [charactersData.data.offset, charactersData.data.limit].concat(mappedResult));
+    this.filteredCharacters = this.characters.slice(begin, end);
+};
 
-        $scope.filterCharacters();
-    };
+CharacterSelectionCtrl.prototype.handleServerPageLoaded = function(charactersData) {
+    var mappedResult = charactersData.data.results.map(character => convertCharacterData(character));
+    [].splice.apply(this.characters, [charactersData.data.offset, charactersData.data.limit].concat(mappedResult));
 
-    $scope.handlePageChanged = function() {
-        $scope.filterCharacters();
+    this.filterCharacters();
+};
 
-        if(CharacterApi.shouldLoadNextPage($scope.currentPage, $scope.numPerPage, $scope.serverOffsetTop)) {
-            $scope.serverOffsetTop = CharacterApi.getNextPageOffset($scope.serverOffsetTop, $scope.numPerPageOnServer);
-            $scope.loadCharacters($scope.serverOffsetTop)
-                .success((data) => {
-                    $scope.serverOffsetTop = data.data.offset + data.data.limit;
-                });
-        }
+CharacterSelectionCtrl.prototype.handlePageChanged = function() {
+    this.filterCharacters();
 
-        if(CharacterApi.shouldLoadPrevPage($scope.currentPage, $scope.numPerPage, $scope.serverOffsetBottom)) {
-            $scope.serverOffsetBottom = CharacterApi.getPrevPageOffset($scope.serverOffsetBottom, $scope.numPerPageOnServer);
-            $scope.loadCharacters($scope.serverOffsetBottom)
-                .success((data) => {
-                    $scope.serverOffsetBottom = data.data.offset;
-                });
-        }
+    if(services.CharacterApi.shouldLoadNextPage(this.currentPage, this.numPerPage, this.serverOffsetTop)) {
+        this.serverOffsetTop = services.CharacterApi.getNextPageOffset(this.serverOffsetTop, this.numPerPageOnServer);
+        this.loadCharacters(this.serverOffsetTop)
+            .success((data) => {
+                this.serverOffsetTop = data.data.offset + data.data.limit;
+            });
+    }
 
-        $location.path('/list/' + ($scope.currentPage - 1) * $scope.numPerPage, false);
-    };
+    if(services.CharacterApi.shouldLoadPrevPage(this.currentPage, this.numPerPage, this.serverOffsetBottom)) {
+        this.serverOffsetBottom = services.CharacterApi.getPrevPageOffset(this.serverOffsetBottom, this.numPerPageOnServer);
+        this.loadCharacters(this.serverOffsetBottom)
+            .success((data) => {
+                this.serverOffsetBottom = data.data.offset;
+            });
+    }
 
-    $scope.increasePageNum = function() {
-        $scope.currentPage += 1;
-        $scope.filterCharacters();
-        $scope.handlePageChanged();
-    };
+    services.$location.path('/list/' + (this.currentPage - 1) * this.numPerPage, false);
+};
 
-    $scope.decreasePageNum = function() {
-        if($scope.currentPage > 1) {
-            $scope.currentPage -= 1;
-            $scope.filterCharacters();
-            $scope.handlePageChanged();
-        }
-    };
+CharacterSelectionCtrl.prototype.increasePageNum = function() {
+    this.currentPage += 1;
+    this.filterCharacters();
+    this.handlePageChanged();
+};
 
-    $scope.getImgUrl = function(url) {
-       return url + '/portrait_xlarge.jpg'
-    };
+CharacterSelectionCtrl.prototype.decreasePageNum = function() {
+    if(this.currentPage > 1) {
+        this.currentPage -= 1;
+        this.filterCharacters();
+        this.handlePageChanged();
+    }
+};
 
-    $scope.initController();
+CharacterSelectionCtrl.prototype.getImgUrl = function(url) {
+    return url + '/portrait_xlarge.jpg'
 };
 
 module.exports = CharacterSelectionCtrl;

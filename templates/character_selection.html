@@ -2,38 +2,41 @@
     <div class="col-xs-3 col-md-3">
         <character-box
                 class="redCorner" style="background: red;"
-                description="redCorner.name"
-                img-url="redCorner.thumbnailPath ? redCorner.thumbnailPath + '/portrait_xlarge.jpg' : null">
+                description="characters.redCorner.name"
+                img-url="characters.redCorner.thumbnailPath ? characters.redCorner.thumbnailPath + '/portrait_xlarge.jpg' : null">
         </character-box>
     </div>
 
     <div class="col-xs-6 col-md-6">
-        <a class="btn btn-danger btn-block fight-button" ng-href="#/fight/{{redCorner.id}}/{{blueCorner.id}}">Start Fight</a>
+        <a class="btn btn-danger btn-block fight-button"
+           ng-href="#/fight/{{characters.redCorner.id}}/{{characters.blueCorner.id}}">
+            Start Fight
+        </a>
     </div>
 
     <div class="col-xs-3 col-md-3">
         <character-box
                class="blueCorner"
-               description="blueCorner.name"
-               img-url="blueCorner.thumbnailPath ? blueCorner.thumbnailPath + '/portrait_xlarge.jpg' : null">
+               description="characters.blueCorner.name"
+               img-url="characters.blueCorner.thumbnailPath ? characters.blueCorner.thumbnailPath + '/portrait_xlarge.jpg' : null">
         </character-box>
     </div>
 </div>
 
 <div class="row">
     <div class="col-md-12">
-        <button style="float:left" ng-click="decreasePageNum()">Left</button>
-        <button style="float:right" ng-click="increasePageNum()">Right</button>
+        <button style="float:left" ng-click="characters.decreasePageNum()">Left</button>
+        <button style="float:right" ng-click="characters.increasePageNum()">Right</button>
     </div>
 </div>
 
 <div class="row list">
-    <div class="col-xs-3 col-md-3" ng-repeat="character in filteredCharacters">
+    <div class="col-xs-3 col-md-3" ng-repeat="character in characters.filteredCharacters">
         <character-box
                 description="character.name"
                 img-url="character.thumbnailPath + '/portrait_xlarge.jpg'"
-                action-right="setBlueCorner(character)"
-                action-left="setRedCorner(character)"
+                action-right="characters.setBlueCorner(character)"
+                action-left="characters.setRedCorner(character)"
                 data="character">
         </character-box>
     </div>

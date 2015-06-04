@@ -5,8 +5,9 @@ var CharacterSelectionCtrl = require("./controllers/CharacterSelectionCtrl");
 var FightCtrl = require("./controllers/FightCtrl");
 
 var CharacterApi = require("./services/CharacterApi");
-var Fighter = require("./services/Fighter");
+var Fighting = require("./services/Fighting");
 var ApiConstants = require("./services/ApiConstants");
+var Paging = require("./services/Paging");
 
 var characterBox = require("./directives/characterBox");
 var router = require("./common/router");
@@ -24,8 +25,9 @@ angular.module("dueDateCalculator", ['ngRoute'])
     .controller("CharacterSelectionCtrl", CharacterSelectionCtrl)
     .controller("FightCtrl", FightCtrl)
     .factory("CharacterApi",CharacterApi)
-    .factory("Fighter", Fighter)
+    .factory("Fighting", Fighting)
     .factory("ApiConstants", ApiConstants)
+    .factory("Paging", Paging)
     .directive("characterBox", characterBox);
 
 

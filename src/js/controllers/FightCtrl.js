@@ -1,12 +1,10 @@
 
-var Fighter = require("../services/Fighter");
-
 var services = {};
 
 var FightCtrl = function($interval, Fighter, $routeParams, CharacterApi) {
     services = {
         $interval: $interval,
-        Fighter: Fighter,
+        Fighting: Fighting,
         $routeParams: $routeParams,
         CharacterApi: CharacterApi
     };
@@ -29,7 +27,7 @@ FightCtrl.prototype.fight = function() {
         this.leftHighlight = !this.leftHighlight;
     }, 200);
 
-    services.Fighter.fight().then((isWinnerTheLeft) => {
+    services.Fighting.fight().then((isWinnerTheLeft) => {
         services.$interval.cancel(interval);
         this.rightHighlight = this.leftHighlight = false;
         isWinnerTheLeft ? this.leftHighlight = true : this.rightHighlight = true;

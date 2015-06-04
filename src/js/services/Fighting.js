@@ -1,7 +1,7 @@
 
 var services = {};
 
-var Fighter = function($timeout, $q) {
+var Fighting = function($timeout, $q) {
     services = {
         $timeout: $timeout,
         $q: $q
@@ -24,4 +24,4 @@ function getWinner() {
     return Math.round(Math.random());
 }
 
-module.exports = Fighter;
+module.exports = Fighting;

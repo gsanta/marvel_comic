@@ -1,20 +1,12 @@
 
-function convertCharacterData(character) {
-    return {
-        name: character.name,
-        description: character.description,
-        id: character.id,
-        thumbnailPath: character.thumbnail ? character.thumbnail.path : null
-    }
-}
-
 var services = {};
 
-var CharacterSelectionCtrl = function($location, $routeParams, CharacterApi) {
+var CharacterSelectionCtrl = function($location, $routeParams, CharacterApi, Paging) {
     services = {
         $location: $location,
         $routeParams: $routeParams,
-        CharacterApi: CharacterApi
+        CharacterApi: CharacterApi,
+        Paging: Paging
     };
 
     this.redCorner = {};
@@ -32,11 +24,13 @@ var CharacterSelectionCtrl = function($location, $routeParams, CharacterApi) {
 };
 
 CharacterSelectionCtrl.prototype.setRedCorner = function(data) {
-    this.redCorner = this.characters[this.characters.indexOf(data)];
+    this.redCorner = this.characters[this.characters.indexOf(data)] !== -1 ?
+        this.characters[this.characters.indexOf(data)] : {};
 };
 
 CharacterSelectionCtrl.prototype.setBlueCorner = function(data) {
-    this.blueCorner = this.characters[this.characters.indexOf(data)];
+    this.blueCorner = this.characters[this.characters.indexOf(data)] !== -1 ?
+        this.characters[this.characters.indexOf(data)] : {};
 };
 
 CharacterSelectionCtrl.prototype.loadCharacters = function(offset) {
@@ -51,23 +45,20 @@ CharacterSelectionCtrl.prototype.loadCharacters = function(offset) {
 CharacterSelectionCtrl.prototype.initController = function() {
     this.currentPage = services.$routeParams.offset ?
             Math.floor(parseInt(services.$routeParams.offset,10) / this.numPerPage) + 1 : 1;
-    this.serverOffsetBottom = this.currentPage * this.numPerPage;
-    this.serverOffsetTop = this.currentPage * this.numPerPage;
+    this.serverOffsetTop = this.serverOffsetBottom = this.currentPage * this.numPerPage;
 
     this.loadCharacters(this.serverOffsetBottom);
     this.handlePageChanged();
 };
 
 CharacterSelectionCtrl.prototype.filterCharacters = function() {
-    var begin = ((this.currentPage - 1) * this.numPerPage)
-        , end = begin + this.numPerPage;
+    var boundaries = services.Paging.getClientPageBoundaries(this.currentPage, this.numPerPage);
 
-    this.filteredCharacters = this.characters.slice(begin, end);
+    this.filteredCharacters = this.characters.slice(boundaries.lowerInnerBound, boundaries.upperOuterBound);
 };
 
 CharacterSelectionCtrl.prototype.handleServerPageLoaded = function(charactersData) {
-    var mappedResult = charactersData.data.results.map(character => convertCharacterData(character));
-    [].splice.apply(this.characters, [charactersData.data.offset, charactersData.data.limit].concat(mappedResult));
+    services.Paging.mergeServerPage(charactersData, this.characters);
 
     this.filterCharacters();
 };
@@ -75,6 +66,13 @@ CharacterSelectionCtrl.prototype.handleServerPageLoaded = function(charactersDat
 CharacterSelectionCtrl.prototype.handlePageChanged = function() {
     this.filterCharacters();
 
+    this.loadNextPageIfNecessary();
+    this.loadPrevPageIfNecessary();
+
+    services.$location.path('/list/' + (this.currentPage - 1) * this.numPerPage, false);
+};
+
+CharacterSelectionCtrl.prototype.loadNextPageIfNecessary = function() {
     if(services.CharacterApi.shouldLoadNextPage(this.currentPage, this.numPerPage, this.serverOffsetTop)) {
         this.serverOffsetTop = services.CharacterApi.getNextPageOffset(this.serverOffsetTop, this.numPerPageOnServer);
         this.loadCharacters(this.serverOffsetTop)
@@ -82,7 +80,9 @@ CharacterSelectionCtrl.prototype.handlePageChanged = function() {
                 this.serverOffsetTop = data.data.offset + data.data.limit;
             });
     }
+};
 
+CharacterSelectionCtrl.prototype.loadPrevPageIfNecessary = function() {
     if(services.CharacterApi.shouldLoadPrevPage(this.currentPage, this.numPerPage, this.serverOffsetBottom)) {
         this.serverOffsetBottom = services.CharacterApi.getPrevPageOffset(this.serverOffsetBottom, this.numPerPageOnServer);
         this.loadCharacters(this.serverOffsetBottom)
@@ -90,20 +90,16 @@ CharacterSelectionCtrl.prototype.handlePageChanged = function() {
                 this.serverOffsetBottom = data.data.offset;
             });
     }
-
-    services.$location.path('/list/' + (this.currentPage - 1) * this.numPerPage, false);
 };
 
 CharacterSelectionCtrl.prototype.increasePageNum = function() {
     this.currentPage += 1;
-    this.filterCharacters();
     this.handlePageChanged();
 };
 
 CharacterSelectionCtrl.prototype.decreasePageNum = function() {
     if(this.currentPage > 1) {
         this.currentPage -= 1;
-        this.filterCharacters();
         this.handlePageChanged();
     }
 };

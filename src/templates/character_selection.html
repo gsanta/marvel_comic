@@ -37,7 +37,7 @@
 </div>
 
 <div class="row character-list">
-    <div class="col-xs-3 col-md-3" ng-repeat="character in characters.filteredCharacters">
+    <div class="col-xs-3 col-md-3" ng-repeat="character in characters.filteredCharacters track by $index">
         <character-box
                 description="character.name"
                 img-url="character.thumbnailPath + '/portrait_xlarge.jpg'"
